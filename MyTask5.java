@@ -1,60 +1,43 @@
 package task;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MyTask5 {
-	public static void check_db_keys(List<String> arg1, List<String> arg2) {
-		Set<String> keysset = new HashSet<String>(arg1);
-		Set<String> keysdbset = new HashSet<String>(arg2);
-		keysdbset.removeAll(keysset);
-		if(!keysdbset.isEmpty()) {
-		System.out.println(keysdbset);
-		keysset = new HashSet<String>(arg1);
-		keysdbset = new HashSet<String>(arg2);
-		keysset.removeAll(keysdbset);
-		if(!keysset.isEmpty()) {
-			System.out.println(keysset);
-		}
-		}
-	}
-
-	public static void check_keys(Set<String> arg1, Set<String> arg2) {
-		Set<String> k = arg1;
-		Set<String> dbk = arg2;
-		k.removeAll(dbk);
-		if(!k.isEmpty()) {
-			System.out.println(k);
-		}
-	}
-
-	
 	public static void main(String[] args) {
+		List<String> keys = new ArrayList<>();
+        List<String> dbkeys1 = new ArrayList<>();
+        List<String> dbkeys2 = new ArrayList<>();
 
-		List<String> keys = new ArrayList<String>();
-        keys.add("A");
-        keys.add("B");
-        keys.add("C");
-        keys.add("D");
+        keys.add(new String("A"));
+        keys.add(new String("B"));
+        keys.add(new String("C"));
+        keys.add(new String("D"));
 
-        List<String> keysdb1 = new ArrayList<String>();
-        keysdb1.add("A");
-        keysdb1.add("B");
-        keysdb1.add("C");
-        keysdb1.add("D");
-        keysdb1.add("E");
+        dbkeys1.add(new String("A"));
+        dbkeys1.add(new String("B"));
+        dbkeys1.add(new String("C"));
+        dbkeys1.add(new String("D"));
+        dbkeys1.add(new String("E"));
         
-        List<String> keysdb2 = new ArrayList<String>();
-        keysdb2.add("A");
-        keysdb2.add("B");
-        keysdb2.add("C");
-        keysdb2.add("E");
-        check_db_keys(keys, keysdb1);
-        check_db_keys(keys, keysdb2);        
-  
-	}
+        dbkeys2.add(new String("A"));
+        dbkeys2.add(new String("B"));
+        dbkeys2.add(new String("C"));
+        dbkeys2.add(new String("E"));
+        
+        
+        Set<String> result = dbkeys1.stream().distinct().filter(Predicate.not(keys::contains)).collect(Collectors.toSet());
+        System.out.println(result);
+        result = keys.stream().distinct().filter(Predicate.not(dbkeys1::contains)).collect(Collectors.toSet());
+        System.out.println(result);
+        result = dbkeys2.stream().distinct().filter(Predicate.not(keys::contains)).collect(Collectors.toSet());
+        System.out.println(result);
+        result = keys.stream().distinct().filter(Predicate.not(dbkeys2::contains)).collect(Collectors.toSet());
+        System.out.println(result);
+       
+    }
 
 }
